@@ -105,10 +105,8 @@ pub struct Recipe {
 
     // wildcard_forge_category has to do with forge_category in materials.xml
     // wildcard_forge_category is an empty tag if present, so this is deserialized a bit strangely and we have to use the is_wildcard_forge_category function to expose the actual value
-    #[serde(default)]
     wildcard_forge_category: Option<String>,
 
-    #[serde(default)]
     pub craft_tool: Option<CraftTool>,
 
     #[serde_as(as = "DurationSeconds<String>")]
