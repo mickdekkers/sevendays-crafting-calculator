@@ -1,3 +1,4 @@
+use crate::game_data::locale;
 use chrono::Duration;
 use itertools::Itertools;
 use serde::Deserialize;
@@ -9,6 +10,15 @@ pub struct ItemSpecifier {
     pub name: String,
     #[serde_as(as = "DisplayFromStr")]
     pub count: u32,
+}
+
+impl ItemSpecifier {
+    pub fn display_name(&self) -> &str {
+        locale::DISPLAY_NAMES
+            .get(&self.name)
+            .map(|s| s.as_str())
+            .unwrap_or(&"DISPLAY_NAME_NOT_FOUND")
+    }
 }
 
 // <recipe name="drinkCanEmpty" count="1" material_based="true" craft_area="forge" tags="perkAdvancedEngineering">
@@ -86,6 +96,7 @@ pub struct Recipe {
 
     #[serde(rename = "ingredient", default)]
     pub ingredients: Vec<ItemSpecifier>,
+
     pub craft_area: Option<CraftArea>,
 
     #[serde_as(as = "StringWithSeparator::<CommaSeparator, String>")]
@@ -99,7 +110,7 @@ pub struct Recipe {
 
     #[serde(default)]
     pub craft_tool: Option<CraftTool>,
-    // pub craft_tool: Option<String>,
+
     #[serde_as(as = "DurationSeconds<String>")]
     #[serde(default = "zero_duration")]
     pub craft_time: Duration,
